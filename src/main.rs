@@ -30,6 +30,7 @@ fn main() {
                     }
                     _ => continue,
                 }
+                break;
             },
             _ => {
                 println!("Introduce una opcion valida");
@@ -50,27 +51,22 @@ fn adivinar_tabla(num: usize) {
     numbs.shuffle(&mut thread_rng());
 
     for (num, it, result) in numbs {
-        println!("{num} x {it} = ");
+        println!("\t{num} x {it} = ");
 
-        for _ in 0..3 {
-            let user_try: usize = read_input().trim().parse().unwrap();
+        for j in 0..3 {
+            let user_try = read_input().trim().parse();
+            if let Ok(value) = user_try {
+                if result == value {
+                    println!("Correcto! :)");
+                    break;
+                }
 
-            if result == user_try {
-                println!("Correcto! :)");
-                break;
+                println!("Intenta de nuevo :( {}/3", j + 1);
             }
-
-            println!("Intenta de nuevo :(");
         }
     }
 }
 
 fn generar_tabla(num: usize) -> Vec<(usize, usize, usize)> {
-    let mut numeros: Vec<(usize, usize, usize)> = Vec::new();
-
-    for i in 1..=10 {
-        numeros.push((num, i, i * num));
-    }
-
-    numeros
+    (1..=10).map(|i| (num, i, i * num)).collect()
 }
